@@ -1,0 +1,7 @@
+.venv
+env.toml
+.idea
+.vscode
+db.sqlite3
+command.md
+uploads/*
