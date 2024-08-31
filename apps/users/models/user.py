@@ -3,12 +3,26 @@ from typing import Any
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# from common.functions import clean_spaces
+from common.functions import clean_spaces
 
 
 class User(AbstractUser):
     """A custom user."""
 
+    website = models.URLField(
+        verbose_name="Website URL",
+        max_length=255,
+        blank=True,
+    )
+    description = models.TextField(
+        verbose_name="Description",
+        blank=True,
+    )
+    avatar = models.URLField(
+        verbose_name="Avatar",
+        max_length=255,
+        blank=True,
+    )
     created_at = models.DateTimeField(
         verbose_name="Created at",
         auto_now=True,
@@ -40,9 +54,10 @@ class User(AbstractUser):
         """Clean user fields."""
         super().clean()
 
-        # self.username = clean_spaces(self.username.lower())
-        # self.first_name = clean_spaces(self.first_name)
-        # self.last_name = clean_spaces(self.last_name)
+        self.username = clean_spaces(self.username.lower())
+        self.first_name = clean_spaces(self.first_name)
+        self.last_name = clean_spaces(self.last_name)
+        self.description = clean_spaces(self.description)
 
     def updated_fields(self, **fields: Any) -> list[str]:
         """Return a list of the changed fields."""

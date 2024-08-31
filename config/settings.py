@@ -32,10 +32,7 @@ SECRET_KEY = env["core"]["secret_key"]
 
 INSTALLED_APPS = [
     "apps.users",
-    # "apps.products",
-    # "apps.tables",
-    # "apps.transactions",
-    # "apps.api",
+    "apps.api",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -88,11 +85,17 @@ TEMPLATES = [
 
 
 # DATABASES
-# TODO: CHANGE TARGET
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env["database"]["PGDATABASE"],
+        "USER": env["database"]["PGUSER"],
+        "PASSWORD": env["database"]["PGPASSWORD"],
+        "HOST": env["database"]["PGHOST"],
+        "PORT": env["database"]["PGPORT"],
+        "OPTIONS": {
+            "sslmode": "require",
+        },
     }
 }
 
@@ -214,9 +217,9 @@ SIMPLE_JWT = {
 # DJANGO SPECTACULAR
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "BlueWave API",
+    "TITLE": "Instaclone API",
     "DESCRIPTION": (
-        "BlueWave API endpoints specification.<br><br>"
+        "Instaclone API endpoints specification.<br><br>"
         "Base URL: http://127.0.0.1:8000/ <br><br>"
         "**Error responses** <br>"
         "All error responses will return a JSON object with the single key `errors` "
@@ -246,21 +249,21 @@ SPECTACULAR_SETTINGS = {
     "TAGS": [
         {"name": "Auth", "description": "Authentication actions endpoints."},
         {"name": "Users", "description": "Users actions endpoints."},
-        {"name": "Products", "description": "Products actions endpoints."},
-        {"name": "Categories", "description": "Categories actions endpoints."},
-        {"name": "Tables", "description": "Tables actions endpoints."},
-        {"name": "Orders", "description": "Order actions endpoints."},
-        {"name": "Payments", "description": "Payment actions endpoints."},
-        {
-            "name": "Forms",
-            "description": (
-                "Endpoints for application form schemas. <br><br>"
-                "These endpoints return JSON object containing essential frontend "
-                "<i><b>form keys</b></i> such as "
-                "<code>name</code>, <code>value</code>, "
-                "<code>validations</code> properties."
-            ),
-        },
+        # {"name": "Products", "description": "Products actions endpoints."},
+        # {"name": "Categories", "description": "Categories actions endpoints."},
+        # {"name": "Tables", "description": "Tables actions endpoints."},
+        # {"name": "Orders", "description": "Order actions endpoints."},
+        # {"name": "Payments", "description": "Payment actions endpoints."},
+        # {
+        #     "name": "Forms",
+        #     "description": (
+        #         "Endpoints for application form schemas. <br><br>"
+        #         "These endpoints return JSON object containing essential frontend "
+        #         "<i><b>form keys</b></i> such as "
+        #         "<code>name</code>, <code>value</code>, "
+        #         "<code>validations</code> properties."
+        #     ),
+        # },
     ],
 }
 
