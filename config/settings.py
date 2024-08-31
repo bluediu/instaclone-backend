@@ -88,12 +88,19 @@ TEMPLATES = [
 
 
 # DATABASES
-# TODO: CHANGE TARGET
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env["database"]["PGDATABASE"],
+        'USER': env["database"]["PGUSER"],
+        'PASSWORD': env["database"]["PGPASSWORD"],
+        'HOST': env["database"]["PGHOST"],
+        'PORT': env["database"]["PGPORT"],
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
+
 }
 
 # GLOBALIZATION
@@ -214,7 +221,7 @@ SIMPLE_JWT = {
 # DJANGO SPECTACULAR
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "BlueWave API",
+    "TITLE": "Instaclone API",
     "DESCRIPTION": (
         "BlueWave API endpoints specification.<br><br>"
         "Base URL: http://127.0.0.1:8000/ <br><br>"
