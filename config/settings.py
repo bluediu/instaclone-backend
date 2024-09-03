@@ -97,6 +97,7 @@ DATABASES = {
             "sslmode": "require",
         },
     }
+
 }
 
 # GLOBALIZATION
