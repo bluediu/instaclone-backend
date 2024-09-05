@@ -32,6 +32,7 @@ SECRET_KEY = env["core"]["secret_key"]
 
 INSTALLED_APPS = [
     "apps.users",
+    "apps.posts",
     "apps.api",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -97,7 +98,6 @@ DATABASES = {
             "sslmode": "require",
         },
     }
-
 }
 
 # GLOBALIZATION
