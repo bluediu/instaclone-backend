@@ -1,11 +1,11 @@
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+from drf_spectacular import views
 
 
-class APISchemaView(SpectacularAPIView):
+class APISchemaView(views.SpectacularAPIView):
     """API schema view."""
 
 
-class APISpecsView(SpectacularRedocView):
+class APISpecsView(views.SpectacularRedocView):
     """API specifications view."""
 
     url_name = "api:schema"
