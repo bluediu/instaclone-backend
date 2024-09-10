@@ -3,7 +3,6 @@ import tomllib
 from pathlib import Path
 from datetime import timedelta
 
-from drf_spectacular.contrib import rest_framework_simplejwt
 
 # ----------------------------------------------------------------------
 # 0. SETUP
@@ -32,7 +31,6 @@ SECRET_KEY = env["core"]["secret_key"]
 
 INSTALLED_APPS = [
     "apps.users",
-    "apps.posts",
     "apps.api",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -250,21 +248,6 @@ SPECTACULAR_SETTINGS = {
     "TAGS": [
         {"name": "Auth", "description": "Authentication actions endpoints."},
         {"name": "Users", "description": "Users actions endpoints."},
-        # {"name": "Products", "description": "Products actions endpoints."},
-        # {"name": "Categories", "description": "Categories actions endpoints."},
-        # {"name": "Tables", "description": "Tables actions endpoints."},
-        # {"name": "Orders", "description": "Order actions endpoints."},
-        # {"name": "Payments", "description": "Payment actions endpoints."},
-        # {
-        #     "name": "Forms",
-        #     "description": (
-        #         "Endpoints for application form schemas. <br><br>"
-        #         "These endpoints return JSON object containing essential frontend "
-        #         "<i><b>form keys</b></i> such as "
-        #         "<code>name</code>, <code>value</code>, "
-        #         "<code>validations</code> properties."
-        #     ),
-        # },
     ],
 }
 
