@@ -84,7 +84,7 @@ def search_user(request) -> Response:
     summary="Create user",
     request=srz.UserCreateSerializer,
     responses=OpenApiResponse(
-        response=srz.UserCreateSerializer,
+        response=srz.AuthUserInfoSerializer,
         description="User successfully created.",
     ),
 )
@@ -96,7 +96,7 @@ def create_user(request) -> Response:
     payload.check_data()
     data = payload.validated_data
     user = sv.create_user(**data)
-    output = srz.UserInfoSerializer(user)
+    output = srz.AuthUserInfoSerializer(user)
     return Response(data=output.data, status=HTTP_201_CREATED)
 
 
