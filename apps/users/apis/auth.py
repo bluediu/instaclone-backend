@@ -20,7 +20,10 @@ class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):
         """Add user ID to the token."""
         token = super().get_token(user)
         token["user_id"] = user.id
-        token["superuser"] = user.is_superuser
+        token["username"] = user.username
+        token["first_name"] = user.first_name
+        token["last_name"] = user.last_name
+        token["email"] = user.email
         return token
 
     def validate(self, attrs):
@@ -28,6 +31,8 @@ class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data["user_id"] = self.user.id
         data["username"] = self.user.username
+        data["first_name"] = self.user.first_name
+        data["last_name"] = self.user.last_name
         data["email"] = self.user.email
         return data
 
@@ -40,6 +45,11 @@ class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):
             fields={
                 "refresh": srz.CharField(),
                 "access": srz.CharField(),
+                "user_id": srz.CharField(),
+                "username": srz.CharField(),
+                "first_name": srz.CharField(),
+                "last_name": srz.CharField(),
+                "email": srz.CharField(),
             },
         ),
         description="User token successfully retrieved.",

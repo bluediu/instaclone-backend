@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.postgres.search import SearchVector
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 from apps.users.models import User
 
@@ -33,7 +35,7 @@ def search_user(*, search_term: str) -> list[User]:
     return users
 
 
-def create_user(**fields: dict) -> User:
+def create_user(**fields: dict) -> dict:
     """Create a user."""
     _check_password_match(fields)
     # Encrypt password using algorithm `pbkdf2_sha256`.
@@ -47,7 +49,21 @@ def create_user(**fields: dict) -> User:
         # Add groups
         groups = Group.objects.filter(name__in=DEFAULT_GROUPS)
         user.groups.add(*groups)
-    return user
+
+        # Generate JWT.
+        refresh = RefreshToken.for_user(user)
+
+    payload = {
+        "refresh": str(refresh),
+        "access": str(refresh),
+        "user_id": user.id,
+        "username": user.username,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+    }
+
+    return payload
 
 
 def update_user(*, user: User, request_user: User, **fields: dict) -> User:
