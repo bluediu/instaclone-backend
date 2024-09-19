@@ -9,6 +9,10 @@ from common.functions import clean_spaces
 class User(AbstractUser):
     """A custom user."""
 
+    email = models.EmailField(
+        verbose_name="Email address",
+        unique=True,
+    )
     website = models.URLField(
         verbose_name="Website URL",
         max_length=255,
@@ -27,6 +31,10 @@ class User(AbstractUser):
         verbose_name="Updated at",
         auto_now=True,
     )
+
+    USERNAME_FIELD = "email"
+    # removes email from REQUIRED_FIELDS
+    REQUIRED_FIELDS = []
 
     def clean(self):
         """Clean user fields."""
