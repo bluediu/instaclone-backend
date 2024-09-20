@@ -6,7 +6,7 @@ users_patterns = [
     path("search/", api.search_user, name="search"),
     path("create/", api.create_user, name="create"),
     path(
-        "<int:user_id>/",
+        "<str:username>/",
         include(
             [
                 path("get/", api.get_user, name="get"),

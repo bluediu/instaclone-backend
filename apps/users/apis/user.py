@@ -14,11 +14,10 @@ from common.decorators import permission_required
 
 
 _user_api_schema = partial(extend_schema, tags=["Users"])
-_user_id_params = OpenApiParameter(
-    name="user_id",
-    description="User ID.",
+_username_params = OpenApiParameter(
+    name="username",
+    description="Username.",
     location=OpenApiParameter.PATH,
-    type=int,
 )
 
 
@@ -45,7 +44,7 @@ def process_user_query_params(query_params: QueryDict) -> _UserSearchT:
 # noinspection PyUnusedLocal
 @_user_api_schema(
     summary="Get user",
-    parameters=[_user_id_params],
+    parameters=[_username_params],
     responses=OpenApiResponse(
         response=srz.UserInfoSerializer,
         description="User successfully retrieved.",
@@ -53,9 +52,9 @@ def process_user_query_params(query_params: QueryDict) -> _UserSearchT:
 )
 @api_view(["GET"])
 @permission_required("users.view_user")
-def get_user(request, user_id: int) -> Response:
+def get_user(request, username: str) -> Response:
     """Return a user's information."""
-    user = sv.get_user(user_id)
+    user = sv.get_user(username)
     output = srz.UserInfoSerializer(user)
     return Response(data=output.data, status=HTTP_200_OK)
 
@@ -102,7 +101,7 @@ def create_user(request) -> Response:
 
 @_user_api_schema(
     summary="Update user",
-    parameters=[_user_id_params],
+    parameters=[_username_params],
     request=srz.UserUpdateSerializer,
     responses=OpenApiResponse(
         response=srz.UserUpdateSerializer,
@@ -111,7 +110,7 @@ def create_user(request) -> Response:
 )
 @api_view(["PUT"])
 @permission_required("users.change_user")
-def update_user(request, user_id: int) -> Response:
+def update_user(request, username: str) -> Response:
     """
     Update a user's information.
 
@@ -122,7 +121,7 @@ def update_user(request, user_id: int) -> Response:
     """
     payload = srz.UserUpdateSerializer(data=request.data)
     payload.check_data()
-    user = sv.get_user(user_id)
+    user = sv.get_user(username)
     data = sv.update_user(
         user=user,
         request_user=request.user,
