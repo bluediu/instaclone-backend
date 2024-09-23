@@ -21,9 +21,9 @@ def _check_password_match(fields: dict) -> None:
     fields.pop("repeat_password")
 
 
-def get_user(user_id: int) -> User:
+def get_user(username: str) -> User:
     """Return a user."""
-    return get_object_or_404(User, id=user_id)
+    return get_object_or_404(User, username=username)
 
 
 def search_user(*, search_term: str) -> list[User]:
