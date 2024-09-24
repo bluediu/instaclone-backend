@@ -1,14 +1,17 @@
+import cloudinary.uploader
+
 from django.db import transaction
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.postgres.search import SearchVector
-
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
 from apps.users.models import User
+
+from common import functions as fn
+
 
 DEFAULT_GROUPS = ["Users", "Posts", "Comments", "Followers"]
 
@@ -77,4 +80,43 @@ def update_user(*, user: User, request_user: User, **fields: dict) -> User:
     changed_fields = user.updated_fields(**fields)
     user.full_clean()
     user.save(update_fields=changed_fields + ["updated_at"])
+    return user
+
+
+# Avatar
+def upload_avatar(*, user: User, file) -> User:
+    """Upload user avatar."""
+    with transaction.atomic():
+        secure_url, error = fn.upload_to_cloudinary(file)
+
+        if error:
+            raise ValidationError({"avatar": error})
+
+        # Save changes
+        user.avatar = secure_url
+        user.full_clean()
+        user.save(update_fields=["avatar", "updated_at"])
+
+    return user
+
+
+def remove_avatar(*, user: User) -> User:
+    """Delete user avatar."""
+
+    if not user.avatar:
+        raise ValidationError({"avatar": "No avatar to delete"})
+
+    # Extract `public_id`
+    public_id = fn.extract_public_id(user.avatar)
+
+    with transaction.atomic():
+        try:
+            cloudinary.uploader.destroy(public_id)
+        except Exception as error:
+            raise ValidationError({"avatar": str(error)})
+
+        user.avatar = ""
+        user.full_clean()
+        user.save(update_fields=["avatar", "updated_at"])
+
     return user

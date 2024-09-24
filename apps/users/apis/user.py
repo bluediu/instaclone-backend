@@ -104,7 +104,7 @@ def create_user(request) -> Response:
     parameters=[_username_params],
     request=srz.UserUpdateSerializer,
     responses=OpenApiResponse(
-        response=srz.UserUpdateSerializer,
+        response=srz.UserInfoSerializer,
         description="User successfully updated.",
     ),
 )
@@ -127,5 +127,49 @@ def update_user(request, username: str) -> Response:
         request_user=request.user,
         **payload.validated_data,
     )
+    output = srz.UserInfoSerializer(data)
+    return Response(data=output.data, status=HTTP_200_OK)
+
+
+@_user_api_schema(
+    summary="Upload avatar",
+    parameters=[_username_params],
+    request=srz.UserAvatarSerializer,
+    responses=OpenApiResponse(
+        response=srz.UserInfoSerializer,
+        description="Avatar successfully uploaded.",
+    ),
+)
+@api_view(["PUT"])
+@permission_required("users.change_user")
+def upload_avatar(request, username: str) -> Response:
+    """Upload user avatar to Cloudinary."""
+    print(request.data)
+    payload = srz.UserAvatarSerializer(data=request.data)
+    payload.check_data()
+    user = sv.get_user(username)
+    data = sv.upload_avatar(
+        user=user,
+        file=payload.validated_data.get("avatar"),
+    )
+    output = srz.UserInfoSerializer(data)
+    return Response(data=output.data, status=HTTP_200_OK)
+
+
+# noinspection PyUnusedLocal
+@_user_api_schema(
+    summary="Remove avatar",
+    parameters=[_username_params],
+    responses=OpenApiResponse(
+        response=srz.UserInfoSerializer,
+        description="Avatar successfully removed.",
+    ),
+)
+@api_view(["DELETE"])
+@permission_required("users.delete_user")
+def remove_avatar(request, username: str) -> Response:
+    """Remove user avatar from Cloudinary."""
+    user = sv.get_user(username)
+    data = sv.remove_avatar(user=user)
     output = srz.UserInfoSerializer(data)
     return Response(data=output.data, status=HTTP_200_OK)
