@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from rest_framework import serializers as srz
 
 from common.serializers import Serializer
@@ -132,3 +133,17 @@ class UserUpdateSerializer(UserCreateSerializer):
         super().__init__(*args, **kwargs)
         self.fields["username"].required = False
         self.fields["username"].required = False
+
+
+IMAGE_EXTENSION = ["png", "jpg", "jpeg", "webp"]
+
+
+class UserAvatarSerializer(Serializer):
+    """A user avatar input serializer."""
+
+    avatar = srz.ImageField(
+        help_text="Avatar image.",
+        validators=[
+            FileExtensionValidator(IMAGE_EXTENSION),
+        ],
+    )

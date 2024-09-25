@@ -1,5 +1,6 @@
 import os
 import tomllib
+import cloudinary
 from pathlib import Path
 from datetime import timedelta
 
@@ -212,6 +213,15 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
 }
+
+
+# Cloudinary
+cloudinary.config(
+    cloud_name=env["cloudinary"]["CLOUDINARY_NAME"],
+    api_key=env["cloudinary"]["CLOUDINARY_API"],
+    api_secret=env["cloudinary"]["CLOUDINARY_SECRET"],
+    secure=True,
+)
 
 # DJANGO SPECTACULAR
 

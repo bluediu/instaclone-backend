@@ -11,6 +11,8 @@ users_patterns = [
             [
                 path("get/", api.get_user, name="get"),
                 path("update/", api.update_user, name="update"),
+                path("upload_avatar/", api.upload_avatar, name="upload_avatar"),
+                path("remove_avatar/", api.remove_avatar, name="remove_avatar"),
             ]
         ),
     ),
