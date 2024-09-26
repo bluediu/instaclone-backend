@@ -32,6 +32,7 @@ SECRET_KEY = env["core"]["secret_key"]
 
 INSTALLED_APPS = [
     "apps.users",
+    "apps.posts",
     "apps.api",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -256,8 +257,9 @@ SPECTACULAR_SETTINGS = {
     "SORT_OPERATIONS": False,
     "ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE": False,
     "TAGS": [
-        {"name": "Auth", "description": "Authentication actions endpoints."},
-        {"name": "Users", "description": "Users actions endpoints."},
+        {"name": "🔑 Auth", "description": "Authentication actions endpoints."},
+        {"name": "👥 Users", "description": "Users actions endpoints."},
+        {"name": "📸 Publications", "description": "Publications actions endpoints."},
     ],
 }
 

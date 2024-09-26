@@ -1,21 +1,25 @@
-import cloudinary.uploader
-
+# Libs
 from django.db import transaction
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.postgres.search import SearchVector
+
 from rest_framework_simplejwt.tokens import RefreshToken
 
+# Apps
 from apps.users.models import User
 
+# Global
+import cloudinary.uploader
 from common import functions as fn
 
 
 DEFAULT_GROUPS = ["Users", "Posts", "Comments", "Followers"]
 
 
+# ==== Local ====
 def _check_password_match(fields: dict) -> None:
     """Check passwords' integrity."""
     if fields["password"] != fields["repeat_password"]:
@@ -24,6 +28,7 @@ def _check_password_match(fields: dict) -> None:
     fields.pop("repeat_password")
 
 
+# ==== Users ====
 def get_user(username: str) -> User:
     """Return a user."""
     return get_object_or_404(User, username=username)
@@ -83,11 +88,14 @@ def update_user(*, user: User, request_user: User, **fields: dict) -> User:
     return user
 
 
-# Avatar
+# ==== Avatar ====
 def upload_avatar(*, user: User, file) -> User:
     """Upload user avatar."""
+    if user.avatar:
+        remove_avatar(user=user)
+
     with transaction.atomic():
-        secure_url, error = fn.upload_to_cloudinary(file)
+        secure_url, error = fn.upload_to_cloudinary(file=file)
 
         if error:
             raise ValidationError({"avatar": error})

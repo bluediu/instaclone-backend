@@ -1,8 +1,11 @@
+# Libs
 from django.db import models
 
+# Apps
 from apps.users.models import User
 from apps.posts.models import Publication
 
+# Global
 from common.models import BaseModel
 from common.functions import clean_spaces
 

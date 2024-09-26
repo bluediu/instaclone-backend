@@ -1,8 +1,11 @@
+# Core
 from django.db import models
 
+# Apps
 from apps.users.models import User
 from apps.posts.models import Publication
 
+# Global
 from common.models import BaseModel
 
 
@@ -11,6 +14,8 @@ class Like(BaseModel):
 
     publication = models.ForeignKey(
         Publication,
+        to_field="code",
+        related_name="likes",
         on_delete=models.PROTECT,
     )
     user = models.ForeignKey(

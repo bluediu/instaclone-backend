@@ -1,8 +1,11 @@
+# Core
 from typing import Any
 
-from django.contrib.auth.models import AbstractUser
+# Libs
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
+# Global
 from common.functions import clean_spaces
 
 
