@@ -1,7 +1,10 @@
+# Core
 from django.db import models
 
+# Apps
 from apps.users.models import User
 
+# Global
 from common.models import BaseModel
 
 

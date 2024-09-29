@@ -1,19 +1,26 @@
+# Core
 from typing import TypedDict
 from functools import partial
 
+# Libs
 from django.http import QueryDict
-from rest_framework.response import Response
 from django.core.validators import ValidationError
+
+from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from rest_framework.decorators import api_view, authentication_classes
+
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 
+# Apps
 from apps.users.services import user as sv
 from apps.users.serializers import user as srz
+
+# Global
 from common.decorators import permission_required
 
 
-_user_api_schema = partial(extend_schema, tags=["Users"])
+_user_api_schema = partial(extend_schema, tags=["👥 Users"])
 _username_params = OpenApiParameter(
     name="username",
     description="Username.",

@@ -1,9 +1,13 @@
+# Core
+import random
+import string
 from datetime import datetime, date
 
+# Libs
 import cloudinary.uploader
 
 
-def upload_to_cloudinary(file, folder="avatars"):
+def upload_to_cloudinary(*, file, folder="avatars"):
     try:
         result = cloudinary.uploader.upload(file, folder=f"instaclone/{folder}")
         return result.get("secure_url"), None
@@ -26,3 +30,9 @@ def parse_date(date_str: str) -> date:
 def clean_spaces(content: str) -> str:
     """Remove spaces from a string."""
     return " ".join(content.split())
+
+
+def generate_random_code(length=6) -> str:
+    """Return a random code."""
+    characters = string.ascii_letters + string.digits
+    return "".join(random.choice(characters) for _ in range(length))

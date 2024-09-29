@@ -1,7 +1,8 @@
+# Core
 from functools import partial
 
+# Libs
 from rest_framework import serializers as srz
-from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -9,7 +10,9 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView as _TokenVerifyView,
 )
 
-_auth_api_schema = partial(extend_schema, tags=["Auth"])
+from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
+
+_auth_api_schema = partial(extend_schema, tags=["🔑 Auth"])
 
 
 class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):

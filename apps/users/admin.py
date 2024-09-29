@@ -1,6 +1,8 @@
+# Libs
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+# Apps
 from apps.users.models.user import User
 
 # Admin panel customization
