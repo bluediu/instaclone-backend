@@ -88,7 +88,7 @@ def create_publication(*, request_user: User, fields: _PubContextT) -> Publicati
         # Create preliminar instance.
         publication = Publication(
             code=fn.generate_random_code(),
-            description=fields["description"],
+            description=fields.get("description", ""),
             user=user,
             image="",
         )

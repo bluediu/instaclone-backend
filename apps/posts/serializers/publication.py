@@ -59,9 +59,10 @@ class PublicationUpdateSerializer(Serializer):
         validators=[
             FileExtensionValidator(IMAGE_EXTENSION),
         ],
+        required=False,
     )
     description = srz.CharField(
         help_text="Description",
-        required=True,
         max_length=100,
+        required=False,
     )
