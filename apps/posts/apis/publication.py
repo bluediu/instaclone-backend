@@ -117,6 +117,5 @@ def update_publication(request, code: str) -> Response:
 def delete_publication(request, code: str) -> Response:
     """Delete a publication."""
     publication = sv.get_publication(code)
-    print(publication.__dict__)
     sv.delete_publication(publication=publication, request_user=request.user)
     return Response(status=HTTP_204_NO_CONTENT)

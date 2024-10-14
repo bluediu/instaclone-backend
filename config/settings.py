@@ -260,6 +260,7 @@ SPECTACULAR_SETTINGS = {
         {"name": "🔑 Auth", "description": "Authentication actions endpoints."},
         {"name": "👥 Users", "description": "Users actions endpoints."},
         {"name": "📸 Publications", "description": "Publications actions endpoints."},
+        {"name": "🩷 Likes", "description": "Likes actions endpoints."},
     ],
 }
 
