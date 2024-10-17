@@ -3,6 +3,7 @@ from django.urls import include, path
 # Apps urls
 from apps.users.urls import urlpatterns as users_api
 from apps.posts.urls.publication import publications_patterns as publication
+from apps.posts.urls.like import likes_patterns as like
 
 from apps.api.views import APISchemaView, APISpecsView
 
@@ -10,6 +11,7 @@ app_name = "api"
 
 posts_api = [
     path("publication/", include((publication, app_name), namespace="publication")),
+    path("like/", include((like, app_name), namespace="like")),
 ]
 
 
