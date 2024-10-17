@@ -1,10 +1,11 @@
 # Libs
+from django.db.models import Q
 from django.db import transaction
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
-from django.contrib.postgres.search import SearchVector
+
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -36,9 +37,15 @@ def get_user(username: str) -> User:
 
 def search_user(*, search_term: str) -> list[User]:
     """Search a user."""
-    users = User.objects.annotate(
-        search=SearchVector("username", "first_name", "last_name")
-    ).filter(search=search_term)
+    users = (
+        User.objects.filter(
+            Q(username__icontains=search_term)
+            | Q(first_name__icontains=search_term)
+            | Q(last_name__icontains=search_term)
+        )
+        .filter(is_active=True)
+        .only("id", "username", "first_name", "last_name", "avatar")
+    )
 
     return users
 
