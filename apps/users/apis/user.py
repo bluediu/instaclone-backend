@@ -72,17 +72,17 @@ def get_user(request, username: str) -> Response:
         OpenApiParameter("search", description="Search user parameter"),
     ],
     responses=OpenApiResponse(
-        response=srz.UserInfoSerializer(many=True),
+        response=srz.UserSearchInfoSerializer(many=True),
         description="Users successfully retrieved.",
     ),
 )
 @api_view(["GET"])
-@permission_required("users.list_user")
+@permission_required("users.view_user")
 def search_user(request) -> Response:
     """Search users by a term, matching it with username, firstname, or lastname."""
     params = process_user_query_params(request.query_params)
     users = sv.search_user(search_term=params["search"])
-    output = srz.UserInfoSerializer(users, many=True)
+    output = srz.UserSearchInfoSerializer(users, many=True)
     return Response(data=output.data, status=HTTP_200_OK)
 
 
