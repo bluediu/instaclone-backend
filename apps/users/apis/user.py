@@ -19,6 +19,9 @@ from apps.users.serializers import user as srz
 # Global
 from common.decorators import permission_required
 
+# Commons
+from common.api import empty_response_spec
+
 
 _user_api_schema = partial(extend_schema, tags=["👥 Users"])
 _username_params = OpenApiParameter(
@@ -89,10 +92,7 @@ def search_user(request) -> Response:
 @_user_api_schema(
     summary="Create user",
     request=srz.UserCreateSerializer,
-    responses=OpenApiResponse(
-        response=srz.AuthUserInfoSerializer,
-        description="User successfully created.",
-    ),
+    responses=empty_response_spec("User created successfully."),
 )
 @authentication_classes(None)
 @api_view(["POST"])
@@ -101,9 +101,8 @@ def create_user(request) -> Response:
     payload = srz.UserCreateSerializer(data=request.data)
     payload.check_data()
     data = payload.validated_data
-    user = sv.create_user(**data)
-    output = srz.AuthUserInfoSerializer(user)
-    return Response(data=output.data, status=HTTP_201_CREATED)
+    sv.create_user(**data)
+    return Response(status=HTTP_201_CREATED)
 
 
 @_user_api_schema(

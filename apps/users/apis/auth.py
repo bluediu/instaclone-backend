@@ -24,6 +24,7 @@ class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token["user_id"] = user.id
         token["username"] = user.username
+        token["avatar"] = user.avatar
         token["first_name"] = user.first_name
         token["last_name"] = user.last_name
         token["email"] = user.email
@@ -34,6 +35,7 @@ class CustomTokenWithUserInfoSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data["user_id"] = self.user.id
         data["username"] = self.user.username
+        data["avatar"] = self.user.avatar
         data["first_name"] = self.user.first_name
         data["last_name"] = self.user.last_name
         data["email"] = self.user.email
