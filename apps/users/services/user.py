@@ -50,7 +50,7 @@ def search_user(*, search_term: str) -> list[User]:
     return users
 
 
-def create_user(**fields: dict) -> dict:
+def create_user(**fields: dict) -> None:
     """Create a user."""
     _check_password_match(fields)
     # Encrypt password using algorithm `pbkdf2_sha256`.
@@ -64,21 +64,6 @@ def create_user(**fields: dict) -> dict:
         # Add groups
         groups = Group.objects.filter(name__in=DEFAULT_GROUPS)
         user.groups.add(*groups)
-
-        # Generate JWT.
-        refresh = RefreshToken.for_user(user)
-
-    payload = {
-        "refresh": str(refresh),
-        "access": str(refresh),
-        "user_id": user.id,
-        "username": user.username,
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "email": user.email,
-    }
-
-    return payload
 
 
 def update_user(*, user: User, request_user: User, **fields: dict) -> User:

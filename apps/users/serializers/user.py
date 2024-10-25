@@ -59,27 +59,6 @@ class UserSearchInfoSerializer(Serializer):
     )
 
 
-class AuthUserInfoSerializer(Serializer):
-    """An auth user info output serializer."""
-
-    refresh = srz.CharField(help_text="Refresh token.")
-    access = srz.CharField(help_text="Access token.")
-    user_id = srz.IntegerField(help_text="User ID.")
-    username = srz.CharField(help_text="Username.")
-    first_name = srz.CharField(
-        help_text="First name.",
-        required=False,
-    )
-    last_name = srz.CharField(
-        help_text="Last name.",
-        required=False,
-    )
-    email = srz.EmailField(
-        help_text="E-mail address.",
-        required=False,
-    )
-
-
 class UserCreateSerializer(Serializer):
     """A user create input serializer."""
 
