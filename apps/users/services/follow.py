@@ -1,5 +1,5 @@
 # Core
-from typing import TypedDict
+from typing import TypedDict, List
 
 # Libs
 from django.db.models import QuerySet
@@ -16,6 +16,17 @@ class IsFollowingT(TypedDict):
 class FollowCountT(TypedDict):
     following_count: int
     followers_count: int
+
+
+def following_users_ids(user: User) -> List[int]:
+    """Following users ids."""
+
+    users_ids = (
+        User.objects.filter(followers__follower=user)
+        .distinct()
+        .values_list("id", flat=True)
+    )
+    return users_ids
 
 
 def is_following(*, follower: User, followed: User) -> IsFollowingT:
@@ -80,3 +91,12 @@ def get_followers(*, user: User) -> QuerySet[User]:
 
     followers = User.objects.filter(following__followed=user)
     return followers
+
+
+def get_recommended_users(user: User) -> QuerySet[User]:
+    """Retrieve the publication feed for the user."""
+
+    users_ids = following_users_ids(user)
+    recommended_users = User.objects.exclude(id__in=users_ids).exclude(id=user.id)[:4]
+    print(recommended_users)
+    return recommended_users

@@ -111,6 +111,25 @@ def get_follow_count(request, username: str) -> Response:
 
 
 @_follow_api_schema(
+    summary="Not following",
+    responses=OpenApiResponse(
+        response=srz.FollowerInfoSerializer(many=True),
+        description="Not following users successfully retrieved.",
+    ),
+)
+@api_view(["GET"])
+@permission_required("users.list_follow")
+def get_not_following(request) -> Response:
+    """Retrieve the publication feed for the user."""
+
+    output = srz.FollowerInfoSerializer(
+        sv.get_recommended_users(user=request.user),
+        many=True,
+    )
+    return Response(data=output.data, status=HTTP_200_OK)
+
+
+@_follow_api_schema(
     summary="Add follow",
     parameters=[_follow_params],
     responses=empty_response_spec("User has been followed."),

@@ -3,9 +3,11 @@ from functools import partial
 
 # Libs
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.decorators import api_view
+from django.core.paginator import Paginator, EmptyPage
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
+from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 
 # Apps
@@ -59,6 +61,46 @@ def list_publications(request, username: str) -> Response:
         sv.list_publications(username),
         many=True,
     )
+    return Response(data=output.data, status=HTTP_200_OK)
+
+
+# noinspection PyUnusedLocal
+@_publication_api_schema(
+    summary="Get publications feed",
+    parameters=[
+        OpenApiParameter(
+            "page",
+            description="Items per page",
+            type=OpenApiTypes.INT,
+            required=True,
+        ),
+    ],
+    responses=OpenApiResponse(
+        response=srz.PublicationInfoSerializer(many=True),
+        description="Publications feed successfully retrieved.",
+    ),
+)
+@api_view(["GET"])
+@permission_required("posts.list_publication")
+def get_publications_feed(request) -> Response:
+    """
+    Retrieve the publication feed for the user.
+
+    Paginates the response, with 4 items per page.
+    """
+
+    # Paginator
+    publications = sv.get_publications_feed(user=request.user)
+    paginator = Paginator(publications, per_page=4)
+    page_number = request.query_params.get("page", 1)
+
+    try:
+        page = paginator.page(page_number)
+    except EmptyPage:
+        # Return an empty array if the requested page is out of range.
+        return Response(data=[], status=HTTP_200_OK)
+
+    output = srz.PublicationInfoSerializer(page, many=True)
     return Response(data=output.data, status=HTTP_200_OK)
 
 

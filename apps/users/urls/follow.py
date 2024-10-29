@@ -5,6 +5,7 @@ from django.urls import include, path
 import apps.users.apis.follow as api
 
 followers_patterns = [
+    path("not_following/", api.get_not_following, name="no_following"),
     path(
         "<str:username>/",
         include(
