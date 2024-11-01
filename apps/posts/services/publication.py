@@ -2,7 +2,10 @@
 from typing import TypedDict, Required, NotRequired, List
 
 # Libs
+import cloudinary.uploader
+
 from django.db import transaction
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.core.validators import ValidationError
 
@@ -10,8 +13,10 @@ from django.core.validators import ValidationError
 from apps.users.models import User
 from apps.posts.models import Publication
 
+# Functions
+from apps.users.services.follow import following_users_ids
+
 # Global
-import cloudinary.uploader
 from common import functions as fn
 
 
@@ -48,13 +53,26 @@ def _validate_pub_context(user: User, pub: Publication) -> None:
     if not user.is_active:
         raise ValidationError({"user": "Must be active."})
 
-    can_update = pub.user != user.id
+    can_update = pub.user.id != user.id
     if not user.is_superuser and can_update:
         msg = "Forbidden action. Only the account owner can update this publication."
         raise ValidationError(msg)
 
 
 # ==== Services ====
+def get_publications_feed(user: User) -> QuerySet[Publication]:
+    """Retrieve the publication feed for the user."""
+
+    users_ids = following_users_ids(user)
+    publications = (
+        Publication.objects.filter(user__in=[user.id, *users_ids])
+        .select_related("user")
+        .order_by("-created_at")
+    )
+
+    return publications
+
+
 def get_publication(code: str) -> Publication:
     """Return a publication."""
     return get_object_or_404(Publication, pk=code)

@@ -6,6 +6,7 @@ import apps.posts.apis.publication as api
 
 publications_patterns = [
     path("create/", api.create_publication, name="create"),
+    path("get_feed/", api.get_publications_feed, name="feed"),
     path(
         "<str:code>/",
         include(
