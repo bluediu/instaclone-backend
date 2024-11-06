@@ -69,7 +69,7 @@ def is_liked(request, code: str) -> Response:
 @_like_api_schema(
     summary="Like publication",
     parameters=[_like_params],
-    responses=empty_response_spec("Publication has been liked."),
+    responses=empty_response_spec("Like has been added."),
 )
 @api_view(["POST"])
 @permission_required("posts.create_like")

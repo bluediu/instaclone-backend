@@ -7,8 +7,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 
 
-from rest_framework_simplejwt.tokens import RefreshToken
-
 # Apps
 from apps.users.models import User
 
