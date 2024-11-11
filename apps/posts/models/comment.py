@@ -20,12 +20,12 @@ class Comment(BaseModel):
     publication = models.ForeignKey(
         Publication,
         related_name="comments",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
         User,
         related_name="comments",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
 
     class Meta(BaseModel.Meta):
@@ -40,4 +40,5 @@ class Comment(BaseModel):
 
     def clean(self):
         """Clean comment fields."""
+
         self.comment = clean_spaces(self.comment.capitalize())

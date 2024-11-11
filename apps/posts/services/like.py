@@ -5,8 +5,7 @@ from django.core.exceptions import ValidationError
 
 # Apps
 from apps.users.models import User
-from apps.posts.models import Like
-from apps.posts.models import Publication
+from apps.posts.models import Like, Publication
 
 
 class CountLikes(TypedDict):

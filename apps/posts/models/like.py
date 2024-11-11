@@ -16,7 +16,7 @@ class Like(BaseModel):
         Publication,
         to_field="code",
         related_name="likes",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
         User,
