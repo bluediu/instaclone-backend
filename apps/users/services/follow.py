@@ -98,5 +98,4 @@ def get_recommended_users(user: User) -> QuerySet[User]:
 
     users_ids = following_users_ids(user)
     recommended_users = User.objects.exclude(id__in=users_ids).exclude(id=user.id)[:4]
-    print(recommended_users)
     return recommended_users

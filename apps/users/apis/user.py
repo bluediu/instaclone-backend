@@ -150,7 +150,6 @@ def update_user(request, username: str) -> Response:
 @permission_required("users.change_user")
 def upload_avatar(request, username: str) -> Response:
     """Upload user avatar to Cloudinary."""
-    print(request.data)
     payload = srz.UserAvatarSerializer(data=request.data)
     payload.check_data()
     user = sv.get_user(username)
